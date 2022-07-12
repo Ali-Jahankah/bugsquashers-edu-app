@@ -22,6 +22,9 @@ const Context = ({ children }) => {
     country: "",
   });
   const registerFormHandler = (id, val) => {
+    if (id !== "dob" && id !== "country") {
+      val = val.replace(/\s/g, "");
+    }
     switch (id) {
       case "email":
         setRegister({ ...register, email: val });
@@ -30,7 +33,6 @@ const Context = ({ children }) => {
           !val.includes("@gmail.com") &&
           !val.includes("@bugsquashers.com")
         ) {
-          console.log(val.includes("@bugsqashers.com"));
           setErrorMessage({
             ...errorMessage,
             email: "Please enter only email or gmail!",
@@ -117,18 +119,44 @@ const Context = ({ children }) => {
     switch (id) {
       case "email":
         setLogin({ ...login, email: val });
+        if (
+          !val.includes("@yahoo.com") &&
+          !val.includes("@gmail.com") &&
+          !val.includes("@bugsquashers.com")
+        ) {
+          setErrorMessage({
+            ...errorMessage,
+            email: "Please enter only email or gmail!",
+          });
+        } else {
+          setErrorMessage({
+            ...errorMessage,
+            email: "",
+          });
+        }
         break;
       case "pass":
         setLogin({ ...login, password: val });
+        if (val.length < 8 || val.length > 12) {
+          setErrorMessage({
+            ...errorMessage,
+            password: "Please choose a password between 8-12 characters!",
+          });
+        } else {
+          setErrorMessage({
+            ...errorMessage,
+            password: "",
+          });
+        }
         break;
       default:
         break;
     }
   };
-
   const registerValidationHandler = () => {
     const { email, password, confpass, firstname, surname, country, dob } =
       register;
+    let valid = false;
     if (
       email.length !== 0 &&
       password.length !== 0 &&
@@ -145,20 +173,55 @@ const Context = ({ children }) => {
         errorMessage["country"].length) === 0 &&
       register["password"] === register["confpass"]
     ) {
-      alert("Done");
-    } else {
-      alert("NO");
+      valid = true;
     }
+    return valid;
   };
-  const registerHandler = (e) => {
+  const loginValidation = () => {
+    const { email, password } = login;
+    let valid = false;
+    if (
+      email.length !== 0 &&
+      password.length !== 0 &&
+      errorMessage.email.length === 0 &&
+      errorMessage.password.length === 0
+    ) {
+      valid = true;
+    }
+    return valid;
+  };
+  const registerHandler = async () => {
     const valid = registerValidationHandler();
-    console.log(valid);
-    console.log(errorMessage);
+    const { email, password, firstname, surname, country, role } = register;
+    const dob = register.dob.toLocaleDateString();
+
     if (valid) {
-      return alert("Done");
+      const user = { email, password, firstname, surname, country, role, dob };
+      const postOption = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      };
+      const url = "https://bugsquashers-edu-app.herokuapp.com/api/user/signup";
+      const res = await fetch(url, postOption);
+      try {
+        if (res.ok) {
+          const { msg } = await res.json();
+          alert(msg);
+        }
+      } catch (error) {
+        console.log(error);
+        alert("User couldn't be created! :(");
+      }
+    } else {
+      alert("Please fill all the fields");
     }
   };
-  const loginHandler = () => {};
+  const loginHandler = async () => {
+    const valid = loginValidation();
+  };
 
   return (
     <SyntaxContext.Provider
@@ -174,6 +237,7 @@ const Context = ({ children }) => {
         loginFormHandler,
         registerFormHandler,
         errorMessage,
+        setErrorMessage,
       }}
     >
       {children}

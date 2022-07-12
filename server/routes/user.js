@@ -6,25 +6,24 @@ const jwt = require("jsonwebtoken");
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  // connectionString: process.env.DATABASE_URL,
-  // ssl: {
-  //   rejectUnauthorized: false,
-  // },
-  user: "shadab",
-  host: "localhost",
-  database: "bug_squashers",
-  password: "222222",
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+  // user: "ali",
+  // host: "localhost",
+  // database: "bug_squashers",
+  // password: "111111",
+  // port: 5432,
 });
 
 const isEqual = async (enteredPassword, hashedPassword) => {
   return await bcrypt.compare(enteredPassword, hashedPassword);
 };
-
 router.get("/", async (req, res) => {
   const query = "SELECT * FROM user_data";
   const data = await pool.query(query);
-  res.send(data.rows);
+  res.json(data.rows);
 });
 
 router.post("/signup", async (req, res) => {
