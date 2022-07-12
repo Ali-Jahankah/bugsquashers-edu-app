@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import SyntaxContext from "./SyntaxContext";
+import { isExpired, decodeToken } from "react-jwt";
+import { useNavigate } from "react-router";
+// ==========================================================
 const Context = ({ children }) => {
   const [mobileNavClass, setMobileNavClass] = useState(false);
   const [login, setLogin] = useState({ email: "", password: "" });
+  const [preloader, setPreloader] = useState(false);
   const [register, setRegister] = useState({
     email: "",
     password: "",
@@ -21,6 +25,9 @@ const Context = ({ children }) => {
     surname: "",
     country: "",
   });
+
+  const [user, setUser] = useState({});
+  const navigate = useNavigate();
   const registerFormHandler = (id, val) => {
     if (id !== "dob" && id !== "country") {
       val = val.replace(/\s/g, "");
@@ -192,11 +199,20 @@ const Context = ({ children }) => {
   };
   const registerHandler = async () => {
     const valid = registerValidationHandler();
-    const { email, password, firstname, surname, country, role } = register;
+    const { email, password, firstname, surname, country } = register;
     const dob = register.dob.toLocaleDateString();
 
     if (valid) {
-      const user = { email, password, firstname, surname, country, role, dob };
+      setPreloader(true);
+      const user = {
+        email,
+        password,
+        firstname,
+        surname,
+        country,
+        role: "student",
+        dob,
+      };
       const postOption = {
         method: "POST",
         headers: {
@@ -208,8 +224,12 @@ const Context = ({ children }) => {
       const res = await fetch(url, postOption);
       try {
         if (res.ok) {
-          const { msg } = await res.json();
-          alert(msg);
+          alert("Register was successful! :)");
+          setPreloader(false);
+          navigate("/login");
+        } else {
+          setPreloader(false);
+          alert("This email is aliredy existed");
         }
       } catch (error) {
         console.log(error);
@@ -221,6 +241,59 @@ const Context = ({ children }) => {
   };
   const loginHandler = async () => {
     const valid = loginValidation();
+    const { email, password } = login;
+    const url = "https://bugsquashers-edu-app.herokuapp.com/api/user/login";
+    const user = { email, password };
+    const postOption = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    };
+    if (valid) {
+      try {
+        setPreloader(true);
+        const res = await fetch(url, postOption);
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem("token", data.token);
+          setUser(decodeToken(data.token));
+
+          setPreloader(false);
+          navigate("/", { replace: true });
+        } else {
+          setPreloader(false);
+          alert("Email not found :( Register first please :)");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+  const logOutHandler = async () => {
+    const url = "https://bugsquashers-edu-app.herokuapp.com/api/user/logout";
+    const token = localStorage.getItem("token");
+    if (user["firstname"] && token) {
+      const putOption = {
+        method: "PUT",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: "",
+      };
+      try {
+        const res = await fetch(url, putOption);
+        if (res.ok) {
+          const { msg } = await res.json();
+          alert(msg);
+        } else {
+          alert("Please login first");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -238,6 +311,11 @@ const Context = ({ children }) => {
         registerFormHandler,
         errorMessage,
         setErrorMessage,
+        preloader,
+        setPreloader,
+        user,
+        setUser,
+        logOutHandler,
       }}
     >
       {children}
