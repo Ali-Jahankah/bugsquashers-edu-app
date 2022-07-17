@@ -317,6 +317,7 @@ const Context = ({ children }) => {
         } else {
           setPreloader(false);
           setIsAuth(false);
+          navigate("/", { replace: "true" });
         }
       } catch (error) {
         console.log(error);
