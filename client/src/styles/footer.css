@@ -1,6 +1,6 @@
 .footer {
   padding: 0.5em;
-  font-family: "Lemon", cursive;
+  font-family: "Montserrat", cursive;
   text-align: center;
   height: 10vh;
   background: #244800;
@@ -8,4 +8,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 2rem;
 }
