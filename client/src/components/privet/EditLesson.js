@@ -79,7 +79,7 @@ const EditLesson = () => {
             });
             setShowLessonEdit(false);
           }}
-          className="btn lesson_btn cancel_btn"
+          className="btn module_btn"
         >
           Cancel
         </button>

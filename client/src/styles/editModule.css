@@ -3,8 +3,8 @@
   min-height: 100vh;
   position: absolute;
   top: 0;
-  background: linear-gradient(145deg, #0073ad 30%, #00e945);
-
+  background: url("/public/img/teacher.jpg");
+  background-size: cover;
   padding: 1em;
   display: flex;
   justify-content: center;
@@ -17,11 +17,11 @@
   width: 100%;
 }
 .edit_module_sec h1 {
-  font-size: 2rem;
+  font-size: 4rem;
   margin: 1em;
-  font-family: sans-serif;
+  font-family: "Montserrat" cursive;
   letter-spacing: 4px;
-  color: white;
+  color: #ffd400;
   text-shadow: 0px 0px 20px #5491ff;
 }
 .input_container {
@@ -30,49 +30,45 @@
 .module_textarea::placeholder,
 .module_input::placeholder {
   color: black;
+  font-family: "Montserrat";
+  font-size: 25px;
 }
 
 .module_input,
 .module_textarea {
   padding: 0.5em 1em;
   resize: none;
-  background: rgba(255, 255, 255, 0);
-  color: white;
-  border-radius: 20px;
+  background: rgb(255, 255, 255);
+  color: black;
+  border-radius: 15px;
   outline: 0;
   border: 0;
   transition: 0.7s all;
   border: 1px solid white;
   margin: 1em 0;
-
+  text-shadow: 0px 0px 20px #5491ff;
   font-weight: 500;
 }
 .module_input:focus,
 .module_textarea:focus {
   transform: scale(1.1);
-
   box-shadow: 0 0 7px 2px white;
   border: 0;
 }
-.module_btn,
-.cancel_btn {
-  background: rgb(0, 0, 0);
-  border: 1px solid white;
-  color: rgb(108, 223, 0);
-  letter-spacing: 2px;
-  font-size: 1rem;
-  font-family: sans-serif;
-  font-weight: 700;
-  transition: 0.3s all;
-  transform: scale(1.2);
+.module_btn {
+  width: 6rem;
+  transition: 0.6s all;
+  background: yellow;
+  border: 2px solid rgb(0, 250, 0);
+  border-radius: 0.5rem;
+  padding: 3px 0;
+  font-size: 12pt;
+  margin: 0.4rem;
+  font-family: "Montserrat" cursive;
+  font-weight: 800;
 }
-.module_btn:hover,
-.cancel_btn:hover {
-  box-shadow: 0 0 8px white;
-  transform: scale(1);
-}
-.cancel_btn {
-  color: red;
+.module_btn:hover {
+  background: rgb(255, 174, 0);
 }
 
 @media screen and (min-width: 650px) {
