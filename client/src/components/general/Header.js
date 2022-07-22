@@ -8,6 +8,7 @@ const Header = () => {
   return (
     <header className="header">
      <nav className="nav_dektop">
+    <h4>Education App</h4>
         <ul className="nav_ul">
           <li>
             <Link to="/" className="nav_link">
