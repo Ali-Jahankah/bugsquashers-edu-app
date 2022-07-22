@@ -7,6 +7,16 @@ const Header = () => {
   const { mobileNavClass, setMobileNavClass, user } = useContext(SyntaxContext);
   return (
     <header className="header">
+     <nav className="nav_dektop">
+        <ul className="nav_ul">
+          <li>
+            <Link to="/" className="nav_link">
+              <img src="/svg/home.svg" alt="home svg" />
+              <span>Home</span>
+            </Link>
+          </li>
+        </ul>
+      </nav>
       <div className="nav_options">
         <div className="user_div">
           <ul className="user_ul">
@@ -32,18 +42,15 @@ const Header = () => {
             )}
           </ul>
         </div>
-        <div className="logo_div"></div>
+        <div className="logo_div">
+          <a
+            href="https://www.breteaufoundation.org/es/pagina-de-inicio/"
+            target="blank"
+          >
+            <img src="/img/logo.png" alt="foundation logo" className="logo" />
+          </a></div>
       </div>
-      <nav className="nav_dektop">
-        <ul className="nav_ul">
-          <li>
-            <Link to="/" className="nav_link">
-              <img src="/svg/home.svg" alt="home svg" />
-              <span>Home</span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
+     
       <div className={`mobile_nav ${mobileNavClass ? "moving" : ""}`}>
         <ul className="mobile_nav_ul">
           <li
