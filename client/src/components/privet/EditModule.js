@@ -78,7 +78,7 @@ const EditModule = () => {
             });
             setShowEdit(false);
           }}
-          className="btn module_btn cancel_btn"
+          className="btn module_btn  "
         >
           Cancel
         </button>
